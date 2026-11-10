@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User credential and profile entity for administrative and teacher staff accounts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique system identifier" },
+        "username": { "type": "string", "description": "Unique login username" },
+        "password": { "type": "string", "description": "Account password" },
+        "role": { "type": "string", "enum": ["admin", "teacher"], "description": "Access role" },
+        "name": { "type": "string", "description": "Full display name" },
+        "employeeId": { "type": "string", "description": "Institutional employee identification number" },
+        "emailId": { "type": "string", "description": "Primary communication email" },
+        "contactNumber": { "type": "string", "description": "Primary phone/contact number" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of creation" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" }
+      },
+      "required": ["id", "username", "password", "role", "name"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Master student record entity with multiple phone and email options",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique student identifier" },
+        "name": { "type": "string", "description": "Student full name (Mandatory)" },
+        "rollNumber": { "type": "string", "description": "Student Roll Number / Unique Identifier (Mandatory)" },
+        "course": { "type": "string", "description": "Student enrolled course/degree program (Mandatory)" },
+        "section": { "type": "string", "description": "Class or cohort section" },
+        "phoneNumbers": { "type": "string", "description": "JSON serialized or comma-separated phone numbers" },
+        "emailIds": { "type": "string", "description": "JSON serialized or comma-separated email addresses" },
+        "parentName": { "type": "string", "description": "Guardian/Parent full name" },
+        "parentEmailIds": { "type": "string", "description": "Guardian/Parent email addresses" },
+        "parentPhoneNumbers": { "type": "string", "description": "Guardian/Parent contact numbers" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of record creation" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" }
+      },
+      "required": ["id", "name", "rollNumber", "course"]
+    },
+    "OutlookConnection": {
+      "title": "OutlookConnection",
+      "description": "Secure encrypted Microsoft Outlook OAuth connection document for teacher faculty members",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "description": "ID of teacher associated with this connection" },
+        "teacherUsername": { "type": "string", "description": "Username of teacher" },
+        "encryptedAccessToken": { "type": "string", "description": "AES-256-GCM encrypted access token" },
+        "encryptedRefreshToken": { "type": "string", "description": "AES-256-GCM encrypted refresh token" },
+        "iv": { "type": "string", "description": "Initialization vector for encryption" },
+        "tag": { "type": "string", "description": "Auth tag for AES GCM" },
+        "expiresAt": { "type": "number", "description": "Token expiration timestamp in milliseconds" },
+        "email": { "type": "string", "description": "Connected Microsoft account email" },
+        "displayName": { "type": "string", "description": "Connected Microsoft account display name" },
+        "accountType": { "type": "string", "description": "Microsoft account classification" },
+        "scopes": { "type": "string", "description": "Authorized OAuth scopes" },
+        "lastVerifiedAt": { "type": "string", "description": "ISO timestamp of last live verification" },
+        "connectedAt": { "type": "string", "description": "ISO timestamp of initial connection" },
+        "status": { "type": "string", "description": "Current connection status" },
+        "errorMessage": { "type": "string", "description": "Error message if any" },
+        "isSandbox": { "type": "boolean", "description": "Whether connection is in sandbox mode" }
+      },
+      "required": ["teacherId", "encryptedAccessToken", "encryptedRefreshToken", "iv", "tag", "expiresAt", "status", "connectedAt"]
+    },
+    "TestConnection": {
+      "title": "TestConnection",
+      "description": "Health check document for testing Firestore connectivity on boot",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "description": "Connection test status" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Collection of all administrative and teacher user profiles"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Master database collection of student records"
+    },
+    "/outlook_connections/{connectionId}": {
+      "schema": "OutlookConnection",
+      "description": "Collection of teacher Microsoft Outlook OAuth connections"
+    },
+    "/test/{docId}": {
+      "schema": "TestConnection",
+      "description": "System connectivity verification documents"
+    }
+  }
+}

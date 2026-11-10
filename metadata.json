@@ -1,0 +1,6 @@
+{
+  "name": "EduCore - Academic Administration & Student Master System",
+  "description": "Institutional management portal with role-based access for Admin and Teachers, Excel batch processing, Teacher credential provisioning, and Student Master Database.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

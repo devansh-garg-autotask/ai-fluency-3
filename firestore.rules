@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    match /users/{userId} {
+      allow get, write: if isValidId(userId);
+      allow list: if true;
+    }
+
+    match /students/{studentId} {
+      allow get, write: if isValidId(studentId);
+      allow list: if true;
+    }
+
+    match /outlook_connections/{connectionId} {
+      allow get, write: if isValidId(connectionId);
+      allow list: if true;
+    }
+
+    match /test/{docId} {
+      allow read, write: if isValidId(docId);
+    }
+  }
+}
